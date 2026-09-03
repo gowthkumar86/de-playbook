@@ -161,6 +161,18 @@ Over the past decade, that foundational 3-layer skeleton has matured into an ope
     HZN --> ICECAT
     ICECAT --> ICE
     CORTEX --> CMP`
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/architecture-overview.png',
+          alt: 'Snowflake 3-Layer Decoupled Architecture Overview',
+          title: 'Snowflake 3-Layer Decoupled Architecture Overview',
+          subtitle: 'Decoupled Cloud Services, Multi-Cluster Query Processing & Database Storage',
+          badge: 'CORE ENGINE BLUEPRINT',
+          caption: 'Official Snowflake architectural diagram showing the complete separation between Cloud Services (Authentication, Infrastructure, Optimizer, Metadata, Security), Multi-Cluster Query Processing (Virtual Warehouses), and Centralized Database Storage (Optimized Columnar Micro-Partitions).',
+          seniorTakeaway: 'The multi-tenant Cloud Services layer acts as the orchestrator and brain. Virtual Warehouses are stateless compute clusters that access shared immutable storage directly without data replication.',
+          tags: ['3-Layer Decoupled', 'Control Plane', 'MPP Warehouses', 'Immutable Storage']
+        }
       ]
     },
     {
@@ -233,6 +245,18 @@ When a query executes (e.g. \`SELECT * FROM orders WHERE order_date = '2026-09-0
           type: 'senior-line',
           title: 'Sargable Predicates & Clustering',
           text: 'Pruning depends on two factors: bare sargable predicates in the query, and tight physical clustering on disk. A selective WHERE clause on a column with widely overlapping min/max ranges will still perform a full-table scan.'
+        }
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/tables-clustered1.png',
+          alt: 'Micro-Partitioning and Columnar Layout',
+          title: 'Micro-Partitioning & Min/Max Column Metadata Layout',
+          subtitle: 'Physical Data Layout with Contiguous Row Groups and Column Metadata',
+          badge: 'STORAGE INTERNALS',
+          caption: 'Snowflake automatically divides tables into immutable micro-partitions (50-500MB uncompressed) containing contiguous row groups stored in columnar format. Column headers store min/max bounds registered in Cloud Services.',
+          seniorTakeaway: 'No traditional B-tree indexes exist on native Snowflake tables. Pruning evaluates WHERE predicates against the Cloud Services metadata dictionary prior to compute dispatch, eliminating non-matching partitions with zero disk I/O.',
+          tags: ['Micro-Partitions', 'Pax Columnar', 'Min/Max Pruning', 'FoundationDB']
         }
       ]
     },
@@ -324,6 +348,28 @@ When a query executes (e.g. \`SELECT * FROM orders WHERE order_date = '2026-09-0
           type: 'interview-line',
           title: 'Horizon vs. Open Catalog',
           text: 'Horizon Catalog is Snowflake’s comprehensive governance surface (tags, masking policies, data quality, lineage). Open Catalog (managed Polaris) is an open Iceberg REST catalog for multi-engine storage interoperability. They work together.'
+        }
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/tables-iceberg-snowflake-as-catalog.svg',
+          alt: 'Snowflake as Managed Iceberg Catalog Architecture',
+          title: 'Apache Iceberg: Snowflake as Managed Iceberg Catalog',
+          subtitle: 'Snowflake-Managed Catalog with Customer-Owned Cloud Storage (External Volumes)',
+          badge: 'OPEN LAKEHOUSE',
+          caption: 'Snowflake acts as the Iceberg catalog and manages data compaction, snapshot expiration, and ACID commits. Parquet data files and Iceberg metadata reside in customer-owned cloud buckets via an External Volume. External engines (Spark, Athena, Trino) query the Parquet files directly.',
+          seniorTakeaway: 'Snowflake-Managed Iceberg gives you full Snowflake DML (MERGE, Time Travel, Dynamic Tables) while eliminating proprietary storage lock-in and avoiding data egress fees.',
+          tags: ['Apache Iceberg', 'Managed Catalog', 'Parquet', 'Open Lakehouse']
+        },
+        {
+          src: '/images/snowflake/tables-iceberg-external-catalog.svg',
+          alt: 'Snowflake with External Iceberg Catalog',
+          title: 'Apache Iceberg: External Catalog Interoperability (Polaris / AWS Glue)',
+          subtitle: 'Unmanaged Iceberg Read Architecture with Open Catalog & External Engines',
+          badge: 'MULTI-ENGINE INTEROP',
+          caption: 'Snowflake connects to an external Iceberg REST catalog (Snowflake Open Catalog / Apache Polaris, AWS Glue, Hive Metastore) to query Parquet data in place without ingestion pipelines.',
+          seniorTakeaway: 'Enables Snowflake to act as a high-speed governed SQL query engine over an existing enterprise data lake without creating redundant ETL copy pipelines.',
+          tags: ['External Catalog', 'Apache Polaris', 'AWS Glue', 'Zero ETL']
         }
       ]
     },

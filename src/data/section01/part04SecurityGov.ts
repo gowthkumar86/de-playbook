@@ -277,12 +277,13 @@ $$;`
       ]
     },
     {
-      heading: '5. Horizon Catalog: Lineage & Data Quality Metrics (DMFs)',
-      subheading: 'Declarative Data Quality Monitoring and Column-Level Lineage',
+      heading: '5. Horizon Catalog: Lineage, Data Quality (DMFs) & Secure Data Sharing',
+      subheading: 'Declarative Data Quality Monitoring, Lineage & Zero-Copy Data Sharing Across Clouds',
       content: `**Horizon Catalog** unifies Snowflake governance into a single pane of glass:
 - **Data Quality Monitors (DMFs):** Declarative Data Metric Functions that compute freshness, uniqueness, and null counts automatically on a scheduled cadence.
 - **Column-Level Lineage:** Automatically traces data lineage across tables, views, Dynamic Tables, and streams without third-party agents.
-- **Trust Center:** Continuous automated scanning of the account for security posture vulnerabilities (e.g. users without MFA, stale service tokens).`,
+- **Trust Center:** Continuous automated scanning of the account for security posture vulnerabilities (e.g. users without MFA, stale service tokens).
+- **Secure Data Sharing:** Grants live, read-only metadata access to consumers without copying or moving underlying micro-partitions. Consumer queries run on the consumer's own virtual warehouse compute. For non-Snowflake customers, Snowflake provisions managed **Reader Accounts**.`,
       codeSnippets: [
         {
           title: 'Attaching Scheduled Data Metric Functions (DMFs) for Automated Quality Audits',
@@ -303,6 +304,18 @@ FROM TABLE(SNOWFLAKE.LOCAL.DATA_METRIC_FUNCTION_HISTORY(
     METRIC_NAME => 'SNOWFLAKE.CORE.NULL_COUNT'
 ))
 ORDER BY scheduled_time DESC LIMIT 10;`
+        }
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/data-sharing-overview.png',
+          alt: 'Snowflake Secure Data Sharing and Reader Accounts Architecture',
+          title: 'Secure Data Sharing: Zero-Copy Data Sharing & Reader Accounts',
+          subtitle: 'Multi-Account, Multi-Cloud Live Data Sharing with Zero Storage Duplication',
+          badge: 'GOVERNED DATA SHARING',
+          caption: 'Snowflake Secure Data Sharing architecture: The data provider shares live access to immutable micro-partitions through Cloud Services metadata pointers. The data consumer executes queries using their own virtual warehouse with zero data movement or egress cost. Reader Accounts enable sharing with organizations that do not have a Snowflake account.',
+          seniorTakeaway: 'Data sharing is zero-copy and instantaneous. Updates committed on provider tables are immediately visible to consumers. The consumer pays 100% of their own query compute credits, keeping provider cost at zero.',
+          tags: ['Data Sharing', 'Zero Copy', 'Reader Accounts', 'Clean Rooms']
         }
       ]
     },

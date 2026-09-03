@@ -33,6 +33,18 @@ export interface CodeSnippet {
   notes?: string[];
 }
 
+export interface ArchitectureFigureItem {
+  src: string;
+  alt: string;
+  title: string;
+  subtitle?: string;
+  caption?: string;
+  seniorTakeaway?: string;
+  sourceNote?: string;
+  badge?: string;
+  tags?: string[];
+}
+
 export interface SectionPart {
   id: string;
   title: string;
@@ -46,6 +58,7 @@ export interface SectionPart {
     heading: string;
     subheading?: string;
     content: string;
+    figures?: ArchitectureFigureItem[];
     codeSnippets?: CodeSnippet[];
     callouts?: {
       type: 'senior-line' | 'interview-line' | 'gotcha' | 'warning' | 'tip';

@@ -183,6 +183,28 @@ JOIN customer c ON s.customer_id = c.customer_id;`
           title: 'Clustering Key Decision Heuristic',
           text: 'Do not cluster small tables (<100 GB). Before applying a clustering key, inspect SYSTEM$CLUSTERING_INFORMATION to verify whether natural ingestion ordering already provides acceptable pruning depth.'
         }
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/tables-clustering-ratio.png',
+          alt: 'Clustering Depth and Micro-Partition Overlap Comparison',
+          title: 'Clustering Depth: Micro-Partition Overlap vs Pruning Efficiency',
+          subtitle: 'Comparing Poorly Clustered vs Well Clustered Micro-Partition Depth',
+          badge: 'PHYSICAL PRUNING',
+          caption: 'Visualizing clustering depth in Snowflake. On the left, unclustered micro-partitions have wide, overlapping key ranges, forcing queries to scan multiple partitions. On the right, clustered partitions have tight, non-overlapping ranges, achieving near-perfect metadata pruning.',
+          seniorTakeaway: 'Average clustering depth measures the average number of overlapping micro-partitions at any point. Lower depth equals faster query pruning and fewer partitions scanned.',
+          tags: ['Clustering Depth', 'Micro-Partitions', 'Pruning Ratio', 'Automatic Clustering']
+        },
+        {
+          src: '/images/snowflake/query-acceleration-table-scan.png',
+          alt: 'Query Acceleration Service Offloaded Table Scan',
+          title: 'Query Acceleration Service (QAS): Offloading Massive Scans',
+          subtitle: 'Serverless Burst Compute Leased for Scan & Filter Operators',
+          badge: 'BURST ACCELERATION',
+          caption: 'How Query Acceleration Service (QAS) works: The primary virtual warehouse offloads massive scan and filter workloads to serverless burst compute resources, allowing large scan queries to finish up to 10× faster without permanently resizing the warehouse.',
+          seniorTakeaway: 'Use QAS for warehouses with predictable, small interactive baseline queries but occasional bursty scan-heavy outlier queries. Check SYSTEM$ESTIMATE_QUERY_ACCELERATION before enabling.',
+          tags: ['QAS', 'Serverless Burst', 'Table Scan', 'Warehouse Sizing']
+        }
       ]
     },
     {

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Copy, Check, Terminal } from 'lucide-react';
+import { MermaidDiagram } from './MermaidDiagram';
+import { SnowflakeArchitectureDiagram } from './SnowflakeArchitectureDiagram';
+import { ArchitectureFigure } from './ArchitectureFigure';
 
 interface MarkdownContentProps {
   content: string;
@@ -101,6 +104,21 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
             </blockquote>
           ),
           pre: ({ children }) => {
+            const child = React.Children.toArray(children)[0];
+            if (React.isValidElement(child) && child.props) {
+              const className = (child.props as { className?: string }).className || '';
+              if (className.includes('language-mermaid') || className.includes('mermaid')) {
+                const codeString = String((child.props as { children?: React.ReactNode }).children || '').trim();
+                if (
+                  codeString.includes('CLOUD SERVICES') &&
+                  codeString.includes('COMPUTE') &&
+                  codeString.includes('STORAGE')
+                ) {
+                  return <SnowflakeArchitectureDiagram />;
+                }
+                return <MermaidDiagram chart={codeString} />;
+              }
+            }
             return (
               <CodeContainer compact={compact}>
                 {children}
@@ -119,6 +137,19 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
                 </code>
               );
             }
+
+            if (className?.includes('language-mermaid') || className?.includes('mermaid')) {
+              const codeString = String(children).trim();
+              if (
+                codeString.includes('CLOUD SERVICES') &&
+                codeString.includes('COMPUTE') &&
+                codeString.includes('STORAGE')
+              ) {
+                return <SnowflakeArchitectureDiagram />;
+              }
+              return <MermaidDiagram chart={codeString} />;
+            }
+
             return (
               <code className={`font-mono-code text-[#E6E6E6] text-[13px] ${className || ''}`} {...props}>
                 {children}
@@ -159,6 +190,14 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
           ),
           hr: () => (
             <hr className="my-6 border-t border-[#D9D1C1]" />
+          ),
+          img: ({ src, alt, title }) => (
+            <ArchitectureFigure
+              src={src || ''}
+              alt={alt || 'Snowflake Architecture Diagram'}
+              title={title || alt || 'Snowflake Architecture Diagram'}
+              caption={alt && alt !== title ? alt : undefined}
+            />
           ),
         }}
       >

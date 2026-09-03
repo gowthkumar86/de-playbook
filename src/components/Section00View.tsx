@@ -19,6 +19,15 @@ export const Section00View: React.FC<Section00ViewProps> = ({
 }) => {
   return (
     <article className="max-w-4xl mx-auto py-8 px-4 md:px-8">
+      {/* Breadcrumb strip */}
+      <div className="flex items-center space-x-2 text-xs font-mono-code text-[#8C7B65] mb-4">
+        <a href="/" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#BF360C] transition-colors cursor-pointer">
+          Curriculum Hub
+        </a>
+        <span>/</span>
+        <span className="text-[#BF360C] font-semibold">Section 00</span>
+      </div>
+
       {/* Editorial Header */}
       <header className="pb-8 border-b border-[#D9D1C1]">
         <div className="flex items-center space-x-2 text-xs font-mono-code font-bold uppercase text-[#BF360C] tracking-wider mb-2">

@@ -304,6 +304,28 @@ WHEN NOT MATCHED AND s.METADATA$ACTION = 'INSERT'
           title: 'Stale Stream Failure',
           text: 'If a stream is not consumed for longer than the source table’s DATA_RETENTION_TIME_IN_DAYS, the stream goes stale and throws an error. It cannot be recovered and must be recreated.'
         }
+      ],
+      figures: [
+        {
+          src: '/images/snowflake/data-pipeline-streams.png',
+          alt: 'Snowflake Continuous CDC Pipeline with Streams & Tasks',
+          title: 'Continuous Data Pipeline: CDC Streams & Automated Task Chaining',
+          subtitle: 'Streaming and Staged Data Transformations into Multi-Tier Relational Analytics',
+          badge: 'PIPELINE ARCHITECTURE',
+          caption: 'Continuous end-to-end CDC architecture in Snowflake: Raw event streams are continuously captured via Streams on landing tables, transformed with scheduled/event-driven Tasks (or Dynamic Tables), and merged downstream into analytics-ready tables.',
+          seniorTakeaway: 'Streams do not store data copies; they are lightweight offset bookmarks into the source table’s Time Travel history. Consuming a stream inside an atomic transaction ensures exactly-once semantics.',
+          tags: ['CDC', 'Streams', 'Tasks', 'Dynamic Tables', 'ACID Merge']
+        },
+        {
+          src: '/images/snowflake/table-streams-offset.png',
+          alt: 'Table Streams Offset Pointer Architecture',
+          title: 'Table Streams Offset Pointer Mechanics',
+          subtitle: 'How Streams Track Delta Versions in Underlying Micro-Partitions',
+          badge: 'CDC INTERNALS',
+          caption: 'Visualizing how a stream maintains an offset pointer against the table’s micro-partition commit timeline. An executed DML transaction advances the stream offset bookmark to the commit timestamp of that transaction.',
+          seniorTakeaway: 'Querying a stream (SELECT) evaluates the delta but does not advance the offset. The offset only advances upon a successful DML commit (INSERT, UPDATE, DELETE, MERGE).',
+          tags: ['Stream Offset', 'Time Travel', 'Micro-Partitions', 'Atomic Commit']
+        }
       ]
     },
     {

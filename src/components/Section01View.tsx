@@ -4,7 +4,9 @@ import { SectionPart, StudyMode } from '../types';
 import { TerminologyGrid } from './TerminologyGrid';
 import { CalloutBox } from './CalloutBox';
 import { CodeBlock } from './CodeBlock';
-import { MermaidViewer } from './MermaidViewer';
+import { MermaidDiagram } from './MermaidDiagram';
+import { SnowflakeArchitectureDiagram } from './SnowflakeArchitectureDiagram';
+import { ArchitectureFigure } from './ArchitectureFigure';
 import { DecisionTreeViewer } from './DecisionTreeViewer';
 import { MarkdownContent } from './MarkdownContent';
 import { TieredQACard } from './TieredQACard';
@@ -83,7 +85,7 @@ export const Section01View: React.FC<Section01ViewProps> = ({
   }
 
   return (
-    <article className="max-w-4xl mx-auto py-8 px-4 md:px-8">
+    <article className="max-w-4xl xl:max-w-7xl mx-auto py-8 px-4 md:px-8">
       {/* Parts Navigation Tabs */}
       <div className="mb-8 border-b border-[#D9D1C1] overflow-x-auto">
         <div className="flex items-center space-x-1 min-w-max pb-1">
@@ -112,6 +114,19 @@ export const Section01View: React.FC<Section01ViewProps> = ({
             );
           })}
         </div>
+      </div>
+
+      {/* Breadcrumb strip */}
+      <div className="flex items-center space-x-2 text-xs font-mono-code text-[#8C7B65] mb-4">
+        <a href="/" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#BF360C] transition-colors cursor-pointer">
+          Curriculum Hub
+        </a>
+        <span>/</span>
+        <a href="/section/01" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/section/01'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#BF360C] transition-colors cursor-pointer">
+          Section 01
+        </a>
+        <span>/</span>
+        <span className="text-[#BF360C] font-semibold">{currentPart.partNumber}</span>
       </div>
 
       {/* Part Editorial Header */}
@@ -358,11 +373,40 @@ export const Section01View: React.FC<Section01ViewProps> = ({
 
             <MarkdownContent content={section.content} />
 
-            {/* Mermaid Diagrams */}
-            {section.mermaidDiagrams &&
-              section.mermaidDiagrams.map((chart, mIdx) => (
-                <MermaidViewer key={mIdx} chart={chart} />
+            {/* Official Architecture Figures */}
+            {section.figures &&
+              section.figures.map((fig, fIdx) => (
+                <ArchitectureFigure
+                  key={fIdx}
+                  src={fig.src}
+                  alt={fig.alt}
+                  title={fig.title}
+                  subtitle={fig.subtitle}
+                  caption={fig.caption}
+                  seniorTakeaway={fig.seniorTakeaway}
+                  sourceNote={fig.sourceNote}
+                  badge={fig.badge}
+                  tags={fig.tags}
+                />
               ))}
+
+            {/* Architectural Diagrams */}
+            {section.mermaidDiagrams &&
+              section.mermaidDiagrams.map((chart, mIdx) => {
+                const isSnowflake3LayerArch =
+                  (chart.includes('CLOUD SERVICES') &&
+                    chart.includes('COMPUTE') &&
+                    chart.includes('STORAGE')) ||
+                  section.heading.includes('Why the Architecture is the Way It Is');
+
+                if (isSnowflake3LayerArch) {
+                  return <SnowflakeArchitectureDiagram key={mIdx} />;
+                }
+
+                return (
+                  <MermaidDiagram key={mIdx} chart={chart} title={section.heading} />
+                );
+              })}
 
             {/* Code Snippets */}
             {section.codeSnippets &&
@@ -419,9 +463,19 @@ export const Section01View: React.FC<Section01ViewProps> = ({
             <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
-          <div className="text-xs text-[#8C7B65] font-mono-code font-semibold">
-            🎉 Section 01 Complete!
-          </div>
+          <a
+            href="/section/02"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.pushState(null, '', '/section/02');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 rounded-lg bg-[#BF360C] hover:bg-[#8C2A2A] text-white text-xs font-semibold transition-colors cursor-pointer"
+          >
+            <span>Next: Section 02 (SQL Patterns)</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
         )}
       </div>
     </article>
