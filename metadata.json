@@ -1,0 +1,6 @@
+{
+  "name": "Data Engineering Interview Master Study Guide",
+  "description": "Senior Data Engineering technical interview preparation platform and study guide covering Snowflake, PySpark, Spark, Databricks, ADF, Advanced SQL, and Lakehouse architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
