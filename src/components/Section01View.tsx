@@ -20,6 +20,7 @@ interface Section01ViewProps {
   completedParts: string[];
   onToggleCompletePart: (partId: string) => void;
   studyMode: StudyMode;
+  onSelectStudyMode?: (mode: StudyMode) => void;
   quizScores: Record<string, 'nailed' | 'close' | 'missed'>;
   onRecordQuizScore: (questionId: string, rating: 'nailed' | 'close' | 'missed') => void;
 }
@@ -30,6 +31,7 @@ export const Section01View: React.FC<Section01ViewProps> = ({
   completedParts,
   onToggleCompletePart,
   studyMode,
+  onSelectStudyMode,
   quizScores,
   onRecordQuizScore,
 }) => {
@@ -44,14 +46,43 @@ export const Section01View: React.FC<Section01ViewProps> = ({
   if (studyMode === 'flashcard') {
     return (
       <div className="max-w-5xl mx-auto py-8 px-4 md:px-8">
+        {/* Study Mode Switcher Bar */}
+        <div className="mb-6 p-2 rounded-xl bg-[#FAF7F2] dark:bg-[#1E1B17] border border-[#D9D1C1] dark:border-[#38332B] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center space-x-2">
+            <span className="px-2.5 py-1 rounded-full bg-[#BF360C]/10 dark:bg-[#BF360C]/20 text-[#BF360C] dark:text-[#E05A36] font-mono-code text-xs font-bold uppercase">
+              Flashcard Drill
+            </span>
+            <span className="text-xs text-[#5A5245] dark:text-[#A89F91]">
+              20 Core Senior Snowflake Questions
+            </span>
+          </div>
+          {onSelectStudyMode && (
+            <div className="flex items-center space-x-1.5 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => onSelectStudyMode('read')}
+                className="px-3 py-1.5 rounded-lg border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#28241F] hover:bg-[#E9E4D9] dark:hover:bg-[#332E27] text-xs font-medium text-[#1A1A1A] dark:text-[#EDE8DF] flex items-center space-x-1.5 transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#8C7B65]" />
+                <span>Editorial View</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectStudyMode('quiz')}
+                className="px-3 py-1.5 rounded-lg border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#28241F] hover:bg-[#E9E4D9] dark:hover:bg-[#332E27] text-xs font-medium text-[#1F4B7A] dark:text-[#5B9BD5] flex items-center space-x-1.5 transition-colors cursor-pointer"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Quiz Assessment</span>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="mb-6 text-center">
-          <span className="px-3 py-1 rounded-full bg-[#BF360C]/10 text-[#BF360C] font-mono-code text-xs font-bold uppercase">
-            Active Study Mode: Flashcard Drill
-          </span>
-          <h1 className="text-2xl md:text-3xl font-serif-heading font-bold text-[#1A1A1A] mt-2">
+          <h1 className="text-2xl md:text-3xl font-serif-heading font-bold text-[#1A1A1A] dark:text-[#EDE8DF]">
             Snowflake 20 Tiered Q&A Flashcard Deck
           </h1>
-          <p className="text-xs text-[#5A5245] mt-1">
+          <p className="text-xs text-[#5A5245] dark:text-[#A89F91] mt-1">
             Rehearse your answers aloud. Reveal the Senior standard to refine nuance.
           </p>
         </div>
@@ -64,14 +95,43 @@ export const Section01View: React.FC<Section01ViewProps> = ({
   if (studyMode === 'quiz') {
     return (
       <div className="max-w-5xl mx-auto py-8 px-4 md:px-8">
+        {/* Study Mode Switcher Bar */}
+        <div className="mb-6 p-2 rounded-xl bg-[#FAF7F2] dark:bg-[#1E1B17] border border-[#D9D1C1] dark:border-[#38332B] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center space-x-2">
+            <span className="px-2.5 py-1 rounded-full bg-[#1F4B7A]/10 dark:bg-[#1F4B7A]/20 text-[#1F4B7A] dark:text-[#5B9BD5] font-mono-code text-xs font-bold uppercase">
+              Self-Assessment Exam
+            </span>
+            <span className="text-xs text-[#5A5245] dark:text-[#A89F91]">
+              Senior Readiness Evaluation
+            </span>
+          </div>
+          {onSelectStudyMode && (
+            <div className="flex items-center space-x-1.5 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => onSelectStudyMode('read')}
+                className="px-3 py-1.5 rounded-lg border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#28241F] hover:bg-[#E9E4D9] dark:hover:bg-[#332E27] text-xs font-medium text-[#1A1A1A] dark:text-[#EDE8DF] flex items-center space-x-1.5 transition-colors cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#8C7B65]" />
+                <span>Editorial View</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectStudyMode('flashcard')}
+                className="px-3 py-1.5 rounded-lg border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#28241F] hover:bg-[#E9E4D9] dark:hover:bg-[#332E27] text-xs font-medium text-[#BF360C] dark:text-[#E05A36] flex items-center space-x-1.5 transition-colors cursor-pointer"
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Flashcards</span>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="mb-6 text-center">
-          <span className="px-3 py-1 rounded-full bg-[#1F4B7A]/10 text-[#1F4B7A] font-mono-code text-xs font-bold uppercase">
-            Active Study Mode: Self-Assessment
-          </span>
-          <h1 className="text-2xl md:text-3xl font-serif-heading font-bold text-[#1A1A1A] mt-2">
+          <h1 className="text-2xl md:text-3xl font-serif-heading font-bold text-[#1A1A1A] dark:text-[#EDE8DF]">
             Snowflake Senior Readiness Exam
           </h1>
-          <p className="text-xs text-[#5A5245] mt-1">
+          <p className="text-xs text-[#5A5245] dark:text-[#A89F91] mt-1">
             Rate yourself honestly on all 20 questions to uncover blind spots before your interview.
           </p>
         </div>
@@ -85,9 +145,55 @@ export const Section01View: React.FC<Section01ViewProps> = ({
   }
 
   return (
-    <article className="max-w-4xl xl:max-w-7xl mx-auto py-8 px-4 md:px-8">
+    <article className="max-w-4xl xl:max-w-7xl mx-auto py-6 sm:py-8 px-3 sm:px-4 md:px-8">
+      {/* Editorial Mode Header Banner with Direct Mode Switchers */}
+      <div className="mb-6 p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#1E1B17] border border-[#D9D1C1] dark:border-[#38332B] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-2xs">
+        <div className="flex items-center space-x-2.5">
+          <div className="p-2 rounded-lg bg-[#BF360C] text-white">
+            <BookOpen className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] font-mono-code font-bold uppercase text-[#BF360C] dark:text-[#E05A36] tracking-wider block">
+              Curriculum Study Modes
+            </span>
+            <span className="text-xs font-semibold text-[#1A1A1A] dark:text-[#EDE8DF]">
+              Select learning format for Section 01
+            </span>
+          </div>
+        </div>
+
+        {onSelectStudyMode && (
+          <div className="flex items-center p-0.5 rounded-lg bg-[#E9E4D9] dark:bg-[#2B2722] border border-[#D9D1C1] dark:border-[#3E382E] text-xs">
+            <button
+              type="button"
+              onClick={() => onSelectStudyMode('read')}
+              className="px-3 py-1.5 rounded-md bg-[#FFFFFF] dark:bg-[#151311] text-[#1A1A1A] dark:text-[#EDE8DF] font-bold shadow-2xs flex items-center space-x-1.5 cursor-pointer"
+            >
+              <BookOpen className="w-3 h-3 text-[#8C7B65]" />
+              <span>Editorial</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectStudyMode('flashcard')}
+              className="px-3 py-1.5 rounded-md text-[#5A5245] dark:text-[#A89F91] hover:text-[#BF360C] dark:hover:text-[#E05A36] font-medium flex items-center space-x-1.5 transition-colors cursor-pointer"
+            >
+              <Layers className="w-3 h-3 text-[#BF360C]" />
+              <span>Flashcards (20)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectStudyMode('quiz')}
+              className="px-3 py-1.5 rounded-md text-[#5A5245] dark:text-[#A89F91] hover:text-[#1F4B7A] dark:hover:text-[#5B9BD5] font-medium flex items-center space-x-1.5 transition-colors cursor-pointer"
+            >
+              <CheckCircle2 className="w-3 h-3 text-[#1F4B7A]" />
+              <span>Assessment</span>
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Parts Navigation Tabs */}
-      <div className="mb-8 border-b border-[#D9D1C1] overflow-x-auto">
+      <div className="mb-8 border-b border-[#D9D1C1] dark:border-[#38332B] overflow-x-auto">
         <div className="flex items-center space-x-1 min-w-max pb-1">
           {SECTION_01_PARTS.map((part) => {
             const isActive = part.id === currentPart.id;
@@ -99,8 +205,8 @@ export const Section01View: React.FC<Section01ViewProps> = ({
                 onClick={() => onSelectPart(part.id)}
                 className={`px-3.5 py-2 rounded-t-lg text-xs font-medium transition-all flex items-center space-x-1.5 cursor-pointer ${
                   isActive
-                    ? 'bg-[#FFFFFF] border-t-2 border-t-[#BF360C] border-x border-[#D9D1C1] text-[#BF360C] font-bold shadow-2xs'
-                    : 'text-[#5A5245] hover:text-[#1A1A1A] hover:bg-[#E9E4D9]'
+                    ? 'bg-[#FFFFFF] dark:bg-[#1E1B17] border-t-2 border-t-[#BF360C] border-x border-[#D9D1C1] dark:border-[#38332B] text-[#BF360C] dark:text-[#E05A36] font-bold shadow-2xs'
+                    : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A] dark:hover:text-[#EDE8DF] hover:bg-[#E9E4D9] dark:hover:bg-[#2B2722]'
                 }`}
               >
                 <span className="font-mono-code text-[10px] text-[#8C7B65]">
@@ -108,7 +214,7 @@ export const Section01View: React.FC<Section01ViewProps> = ({
                 </span>
                 <span>{part.title.split(':')[1]?.trim() || part.title}</span>
                 {isDone && (
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 )}
               </button>
             );

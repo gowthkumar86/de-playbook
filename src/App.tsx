@@ -191,6 +191,15 @@ export function App() {
           onSelectPart={handleSelectPart}
           completedParts={progress.completedParts}
           isHome={isHome}
+          studyMode={studyMode}
+          onSelectStudyMode={(mode) => {
+            setStudyMode(mode);
+            if (location.view === 'section') {
+              const pathWithoutQuery = window.location.pathname;
+              const newUrl = mode === 'read' ? pathWithoutQuery : `${pathWithoutQuery}?mode=${mode}`;
+              window.history.replaceState(null, '', newUrl);
+            }
+          }}
         />
 
         {/* Content Canvas */}
@@ -214,6 +223,14 @@ export function App() {
               completedParts={progress.completedParts}
               onToggleCompletePart={handleTogglePartCompletion}
               studyMode={studyMode}
+              onSelectStudyMode={(mode) => {
+                setStudyMode(mode);
+                if (location.view === 'section') {
+                  const pathWithoutQuery = window.location.pathname;
+                  const newUrl = mode === 'read' ? pathWithoutQuery : `${pathWithoutQuery}?mode=${mode}`;
+                  window.history.replaceState(null, '', newUrl);
+                }
+              }}
               quizScores={progress.quizScores}
               onRecordQuizScore={handleRecordQuizScore}
             />

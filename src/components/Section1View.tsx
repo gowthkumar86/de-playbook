@@ -1,6 +1,7 @@
 import React from 'react';
 import { Database, Upload, ArrowLeft, ArrowRight, CheckCircle2, FileText, Sparkles, BookOpen } from 'lucide-react';
-import { Section1ModuleId } from './Navbar';
+
+export type Section1ModuleId = string;
 
 interface Section1ViewProps {
   activeModule?: Section1ModuleId;
