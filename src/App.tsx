@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { CURRICULUM_SECTIONS } from './data/curriculumRegistry';
 import { SECTION_01_PARTS } from './data/section01Index';
+import { SECTION_02_PARTS } from './data/section02Index';
+import { SECTION_03_PARTS } from './data/section03Index';
 import { CurriculumSection, SearchMatch, StudyMode } from './types';
 import {
   loadUserProgress,
@@ -15,6 +17,8 @@ import { CurriculumModal } from './components/CurriculumModal';
 import { HomePage } from './components/HomePage';
 import { Section00View } from './components/Section00View';
 import { Section01View } from './components/Section01View';
+import { Section02View } from './components/Section02View';
+import { Section03View } from './components/Section03View';
 import { UpcomingSectionView } from './components/UpcomingSectionView';
 
 export function App() {
@@ -30,10 +34,18 @@ export function App() {
     return CURRICULUM_SECTIONS.find((s) => s.id === 'section-01') || CURRICULUM_SECTIONS[0];
   }, [location.view, location.sectionNumber]);
 
-  // Active part resolution for Section 01
+  // Active part resolution for Section 01 / Section 02 / Section 03
   const activePartId = useMemo<string>(() => {
-    if (location.view === 'section' && location.sectionNumber === 1 && location.partId) {
-      return location.partId;
+    if (location.view === 'section') {
+      if (location.sectionNumber === 1) {
+        return location.partId || 'snowflake-part-01';
+      }
+      if (location.sectionNumber === 2) {
+        return location.partId || 'sql-part-01';
+      }
+      if (location.sectionNumber === 3) {
+        return location.partId || 'python-part-01';
+      }
     }
     return 'snowflake-part-01';
   }, [location.view, location.sectionNumber, location.partId]);
@@ -123,12 +135,20 @@ export function App() {
   }, [location.pathname, location.hash]);
 
   const handleSelectSection = (sec: CurriculumSection, partId?: string) => {
-    navigateToSection(sec.number, sec.number === 1 ? (partId || 'snowflake-part-01') : undefined);
+    let targetPart: string | undefined = undefined;
+    if (sec.number === 1) {
+      targetPart = partId || 'snowflake-part-01';
+    } else if (sec.number === 2) {
+      targetPart = partId || 'sql-part-01';
+    } else if (sec.number === 3) {
+      targetPart = partId || 'python-part-01';
+    }
+    navigateToSection(sec.number, targetPart);
     setIsSidebarOpen(false);
   };
 
   const handleSelectPart = (partId: string) => {
-    navigateToSection(1, partId);
+    navigateToSection(activeSection.number, partId);
     setIsSidebarOpen(false);
   };
 
@@ -150,7 +170,18 @@ export function App() {
   };
 
   const isHome = location.view === 'home';
-  const currentPart = SECTION_01_PARTS.find((p) => p.id === activePartId);
+  const currentPart = useMemo(() => {
+    if (activeSection.number === 1) {
+      return SECTION_01_PARTS.find((p) => p.id === activePartId) || SECTION_01_PARTS[0];
+    }
+    if (activeSection.number === 2) {
+      return SECTION_02_PARTS.find((p) => p.id === activePartId) || SECTION_02_PARTS[0];
+    }
+    if (activeSection.number === 3) {
+      return SECTION_03_PARTS.find((p) => p.id === activePartId) || SECTION_03_PARTS[0];
+    }
+    return null;
+  }, [activeSection.number, activePartId]);
 
   return (
     <div className="min-h-screen bg-[#F9F7F2] dark:bg-[#151311] text-[#1A1A1A] dark:text-[#EDE8DF] flex flex-col font-sans transition-colors duration-150">
@@ -158,11 +189,11 @@ export function App() {
       <Navbar
         isHome={isHome}
         activeSectionTitle={!isHome ? `Section ${activeSection.number.toString().padStart(2, '0')}: ${activeSection.title}` : undefined}
-        activePartTitle={!isHome && activeSection.number === 1 ? currentPart?.partNumber : undefined}
+        activePartTitle={!isHome && (activeSection.number === 1 || activeSection.number === 2 || activeSection.number === 3) ? currentPart?.partNumber : undefined}
         studyMode={studyMode}
         onSelectStudyMode={(mode) => {
           setStudyMode(mode);
-          // If we are in section 01, update the query parameter seamlessly
+          // If we are in an active section, update the query parameter seamlessly
           if (location.view === 'section') {
             const pathWithoutQuery = window.location.pathname;
             const newUrl = mode === 'read' ? pathWithoutQuery : `${pathWithoutQuery}?mode=${mode}`;
@@ -173,7 +204,7 @@ export function App() {
         onOpenCurriculum={() => setIsCurriculumOpen(true)}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         completedPartsCount={progress.completedParts.length}
-        totalPartsCount={6} // Section 00 + 5 parts of Section 01
+        totalPartsCount={16} // Section 00 (1) + Section 01 (5) + Section 02 (5) + Section 03 (5)
         onNavigateHome={navigateHome}
         isDark={isDark}
         onToggleTheme={toggleTheme}
@@ -186,7 +217,7 @@ export function App() {
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           activeSectionId={!isHome ? activeSection.id : undefined}
-          activePartId={!isHome && activeSection.number === 1 ? activePartId : undefined}
+          activePartId={!isHome && (activeSection.number === 1 || activeSection.number === 2 || activeSection.number === 3) ? activePartId : undefined}
           onSelectSection={handleSelectSection}
           onSelectPart={handleSelectPart}
           completedParts={progress.completedParts}
@@ -218,6 +249,42 @@ export function App() {
             />
           ) : activeSection.number === 1 ? (
             <Section01View
+              activePartId={activePartId}
+              onSelectPart={handleSelectPart}
+              completedParts={progress.completedParts}
+              onToggleCompletePart={handleTogglePartCompletion}
+              studyMode={studyMode}
+              onSelectStudyMode={(mode) => {
+                setStudyMode(mode);
+                if (location.view === 'section') {
+                  const pathWithoutQuery = window.location.pathname;
+                  const newUrl = mode === 'read' ? pathWithoutQuery : `${pathWithoutQuery}?mode=${mode}`;
+                  window.history.replaceState(null, '', newUrl);
+                }
+              }}
+              quizScores={progress.quizScores}
+              onRecordQuizScore={handleRecordQuizScore}
+            />
+          ) : activeSection.number === 2 ? (
+            <Section02View
+              activePartId={activePartId}
+              onSelectPart={handleSelectPart}
+              completedParts={progress.completedParts}
+              onToggleCompletePart={handleTogglePartCompletion}
+              studyMode={studyMode}
+              onSelectStudyMode={(mode) => {
+                setStudyMode(mode);
+                if (location.view === 'section') {
+                  const pathWithoutQuery = window.location.pathname;
+                  const newUrl = mode === 'read' ? pathWithoutQuery : `${pathWithoutQuery}?mode=${mode}`;
+                  window.history.replaceState(null, '', newUrl);
+                }
+              }}
+              quizScores={progress.quizScores}
+              onRecordQuizScore={handleRecordQuizScore}
+            />
+          ) : activeSection.number === 3 ? (
+            <Section03View
               activePartId={activePartId}
               onSelectPart={handleSelectPart}
               completedParts={progress.completedParts}

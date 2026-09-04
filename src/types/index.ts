@@ -8,8 +8,8 @@ export interface TermItem {
 }
 
 export interface TieredAnswer {
-  basic: string;
-  strong: string;
+  basic?: string;
+  strong?: string;
   senior: string;
   interviewerIntent?: string;
   followUps?: string[];

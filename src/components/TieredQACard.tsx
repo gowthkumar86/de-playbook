@@ -18,6 +18,8 @@ export const TieredQACard: React.FC<TieredQACardProps> = ({
   const [showAllThree, setShowAllThree] = useState(false);
   const [expandedDetails, setExpandedDetails] = useState(false);
 
+  const hasTiers = Boolean(question.answers.basic || question.answers.strong);
+
   return (
     <div
       id={question.id}
@@ -67,24 +69,26 @@ export const TieredQACard: React.FC<TieredQACardProps> = ({
           </div>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
-          <button
-            onClick={() => setShowAllThree(!showAllThree)}
-            className={`flex items-center space-x-1.5 px-3 py-1 rounded text-xs font-medium transition-colors border ${
-              showAllThree
-                ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
-                : 'bg-[#F9F7F2] text-[#5A5245] border-[#D9D1C1] hover:bg-[#E9E4D9]'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Compare All 3 Tiers</span>
-          </button>
-        </div>
+        {/* View Toggle (only if multiple tiers exist) */}
+        {hasTiers && (
+          <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
+            <button
+              onClick={() => setShowAllThree(!showAllThree)}
+              className={`flex items-center space-x-1.5 px-3 py-1 rounded text-xs font-medium transition-colors border ${
+                showAllThree
+                  ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                  : 'bg-[#F9F7F2] text-[#5A5245] border-[#D9D1C1] hover:bg-[#E9E4D9]'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Compare All 3 Tiers</span>
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Tier Switcher (when not showing all three) */}
-      {!showAllThree && (
+      {/* Tier Switcher (when not showing all three, and tiers exist) */}
+      {hasTiers && !showAllThree && (
         <div className="flex items-center space-x-2 my-4 p-1 bg-[#F9F7F2] rounded-lg border border-[#E9E4D9] text-xs font-semibold">
           <button
             onClick={() => setActiveTier('senior')}
@@ -122,7 +126,19 @@ export const TieredQACard: React.FC<TieredQACardProps> = ({
 
       {/* Answer Presentation */}
       <div className="my-4">
-        {showAllThree ? (
+        {!hasTiers ? (
+          <div className="p-5 rounded-lg border border-l-4 border-l-[#BF360C] border-[#D9D1C1] bg-[#FFFDFB] text-[#1A1A1A] leading-relaxed text-[15px]">
+            <div className="flex items-center space-x-2 pb-2 mb-3 border-b border-[#E9E4D9]">
+              <Award className="w-4 h-4 text-[#BF360C]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#BF360C]">
+                Rapid-Fire Standard Answer (30-Second Interview Response)
+              </span>
+            </div>
+            <div className="italic font-medium">
+              <MarkdownContent content={question.answers.senior} compact />
+            </div>
+          </div>
+        ) : showAllThree ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Basic */}
             <div className="p-4 rounded-lg border border-[#E9E4D9] bg-[#FDFDFD]">

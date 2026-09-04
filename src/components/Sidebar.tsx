@@ -1,6 +1,8 @@
 import React from 'react';
 import { CURRICULUM_SECTIONS } from '../data/curriculumRegistry';
 import { SECTION_01_PARTS } from '../data/section01Index';
+import { SECTION_02_PARTS } from '../data/section02Index';
+import { SECTION_03_PARTS } from '../data/section03Index';
 import { CurriculumSection, StudyMode } from '../types';
 import { formatSectionPath, Link } from '../utils/router';
 import { BookOpen, CheckCircle2, ChevronRight, X, Compass, Layers, Award } from 'lucide-react';
@@ -214,14 +216,236 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
 
-          {/* Remaining Sections 02–30 */}
+          {/* Section 02: Advanced SQL */}
+          <div className="space-y-1">
+            <Link
+              to="/section/02"
+              onClick={onClose}
+              className={`w-full text-left p-2.5 rounded-lg text-xs font-semibold transition-all flex items-center justify-between ${
+                activeSectionId === 'section-02'
+                  ? 'bg-[#1A1A1A] text-white dark:bg-[#EDE8DF] dark:text-[#1A1A1A] shadow-2xs'
+                  : 'text-[#1A1A1A] dark:text-[#EDE8DF] hover:bg-[#E9E4D9] dark:hover:bg-[#28241F]'
+              }`}
+            >
+              <div className="flex items-center space-x-2 truncate">
+                <span className="font-mono-code font-bold text-[#BF360C] dark:text-[#E05A36]">02</span>
+                <span className="truncate">Advanced SQL</span>
+              </div>
+              <span className="px-1.5 py-0.2 rounded bg-[#BF360C] text-white text-[9px] font-mono-code uppercase font-bold">
+                Live
+              </span>
+            </Link>
+
+            {/* Study Mode Fast Selector inside Section 02 */}
+            {activeSectionId === 'section-02' && onSelectStudyMode && (
+              <div className="my-2 p-2 rounded-lg bg-[#E9E4D9]/80 dark:bg-[#24201C] border border-[#D9D1C1] dark:border-[#38332B] space-y-1">
+                <div className="text-[10px] uppercase font-mono-code font-bold text-[#8C7B65] dark:text-[#9E8F7A] px-1 mb-1">
+                  Study Modes:
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('read');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'read'
+                        ? 'bg-white dark:bg-[#151311] text-[#1A1A1A] dark:text-[#EDE8DF] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    <BookOpen className="w-3 h-3 text-[#8C7B65]" />
+                    <span>Read</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('flashcard');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'flashcard'
+                        ? 'bg-white dark:bg-[#151311] text-[#BF360C] dark:text-[#E05A36] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#BF360C]'
+                    }`}
+                  >
+                    <Layers className="w-3 h-3 text-[#BF360C]" />
+                    <span>Cards</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('quiz');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'quiz'
+                        ? 'bg-white dark:bg-[#151311] text-[#1F4B7A] dark:text-[#5B9BD5] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1F4B7A]'
+                    }`}
+                  >
+                    <Award className="w-3 h-3 text-[#1F4B7A]" />
+                    <span>Quiz</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Nested Section 02 Parts */}
+            {activeSectionId === 'section-02' && (
+              <div className="ml-3 pl-3 border-l-2 border-[#D9D1C1] dark:border-[#38332B] space-y-1 pt-1">
+                {SECTION_02_PARTS.map((part) => {
+                  const isActive = activePartId === part.id;
+                  const isDone = completedParts.includes(part.id);
+                  const partRoute = formatSectionPath(2, part.id);
+
+                  return (
+                    <Link
+                      key={part.id}
+                      to={partRoute}
+                      onClick={onClose}
+                      className={`w-full text-left py-2 px-2.5 rounded-md text-[11.5px] transition-all flex items-center justify-between ${
+                        isActive
+                          ? 'bg-[#FFFFFF] dark:bg-[#23201D] text-[#BF360C] dark:text-[#E05A36] font-bold shadow-2xs border border-[#D9D1C1] dark:border-[#38332B]'
+                          : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A] dark:hover:text-[#EDE8DF] hover:bg-[#E9E4D9] dark:hover:bg-[#2B2722]'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2 truncate">
+                        <span className="font-mono-code text-[10px] text-[#8C7B65]">
+                          {part.partNumber}
+                        </span>
+                        <span className="truncate">{part.title.split(':')[1]?.trim() || part.title}</span>
+                      </div>
+                      {isDone && (
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0 ml-1" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section 03: Python for Data Engineering */}
+          <div className="space-y-1">
+            <Link
+              to="/section/03"
+              onClick={onClose}
+              className={`w-full text-left p-2.5 rounded-lg text-xs font-semibold transition-all flex items-center justify-between ${
+                activeSectionId === 'section-03'
+                  ? 'bg-[#1A1A1A] text-white dark:bg-[#EDE8DF] dark:text-[#1A1A1A] shadow-2xs'
+                  : 'text-[#1A1A1A] dark:text-[#EDE8DF] hover:bg-[#E9E4D9] dark:hover:bg-[#28241F]'
+              }`}
+            >
+              <div className="flex items-center space-x-2 truncate">
+                <span className="font-mono-code font-bold text-[#BF360C] dark:text-[#E05A36]">03</span>
+                <span className="truncate">Python for DE</span>
+              </div>
+              <span className="px-1.5 py-0.2 rounded bg-[#BF360C] text-white text-[9px] font-mono-code uppercase font-bold">
+                Live
+              </span>
+            </Link>
+
+            {/* Study Mode Fast Selector inside Section 03 */}
+            {activeSectionId === 'section-03' && onSelectStudyMode && (
+              <div className="my-2 p-2 rounded-lg bg-[#E9E4D9]/80 dark:bg-[#24201C] border border-[#D9D1C1] dark:border-[#38332B] space-y-1">
+                <div className="text-[10px] uppercase font-mono-code font-bold text-[#8C7B65] dark:text-[#9E8F7A] px-1 mb-1">
+                  Study Modes:
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('read');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'read'
+                        ? 'bg-white dark:bg-[#151311] text-[#1A1A1A] dark:text-[#EDE8DF] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    <BookOpen className="w-3 h-3 text-[#8C7B65]" />
+                    <span>Read</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('flashcard');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'flashcard'
+                        ? 'bg-white dark:bg-[#151311] text-[#BF360C] dark:text-[#E05A36] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#BF360C]'
+                    }`}
+                  >
+                    <Layers className="w-3 h-3 text-[#BF360C]" />
+                    <span>Cards</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectStudyMode('quiz');
+                      onClose();
+                    }}
+                    className={`py-1 px-1.5 rounded text-[11px] font-medium flex items-center justify-center space-x-1 cursor-pointer transition-colors ${
+                      studyMode === 'quiz'
+                        ? 'bg-white dark:bg-[#151311] text-[#1F4B7A] dark:text-[#5B9BD5] shadow-2xs font-bold'
+                        : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1F4B7A]'
+                    }`}
+                  >
+                    <Award className="w-3 h-3 text-[#1F4B7A]" />
+                    <span>Quiz</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Nested Section 03 Parts */}
+            {activeSectionId === 'section-03' && (
+              <div className="ml-3 pl-3 border-l-2 border-[#D9D1C1] dark:border-[#38332B] space-y-1 pt-1">
+                {SECTION_03_PARTS.map((part) => {
+                  const isActive = activePartId === part.id;
+                  const isDone = completedParts.includes(part.id);
+                  const partRoute = formatSectionPath(3, part.id);
+
+                  return (
+                    <Link
+                      key={part.id}
+                      to={partRoute}
+                      onClick={onClose}
+                      className={`w-full text-left py-2 px-2.5 rounded-md text-[11.5px] transition-all flex items-center justify-between ${
+                        isActive
+                          ? 'bg-[#FFFFFF] dark:bg-[#23201D] text-[#BF360C] dark:text-[#E05A36] font-bold shadow-2xs border border-[#D9D1C1] dark:border-[#38332B]'
+                          : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A] dark:hover:text-[#EDE8DF] hover:bg-[#E9E4D9] dark:hover:bg-[#2B2722]'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2 truncate">
+                        <span className="font-mono-code text-[10px] text-[#8C7B65]">
+                          {part.partNumber.split(':')[0]}
+                        </span>
+                        <span className="truncate">{part.title.split(':')[1]?.trim() || part.title}</span>
+                      </div>
+                      {isDone && (
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0 ml-1" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Remaining Sections 04–30 */}
           <div className="pt-2 border-t border-[#D9D1C1]/60 dark:border-[#38332B]">
             <div className="px-2 pb-2 text-[10px] uppercase font-mono-code font-bold tracking-wider text-[#8C7B65]">
               Upcoming Syllabus Sections
             </div>
             <div className="space-y-0.5">
               {CURRICULUM_SECTIONS.filter(
-                (s) => s.id !== 'section-00' && s.id !== 'section-01'
+                (s) => s.id !== 'section-00' && s.id !== 'section-01' && s.id !== 'section-02' && s.id !== 'section-03'
               ).map((sec) => {
                 const secRoute = formatSectionPath(sec.number);
                 const isSecActive = activeSectionId === sec.id;

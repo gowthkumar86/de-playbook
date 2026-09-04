@@ -111,41 +111,49 @@ export const FlashcardMode: React.FC<FlashcardModeProps> = ({ questions }) => {
         {/* Revealed Answer Area */}
         {isRevealed ? (
           <div className="my-4 pt-4 border-t border-[#E9E4D9]">
-            <div className="flex items-center space-x-2 mb-3">
-              <button
-                onClick={() => setActiveTier('senior')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                  activeTier === 'senior'
-                    ? 'bg-[#BF360C] text-white shadow-xs'
-                    : 'bg-[#F9F7F2] text-[#5A5245]'
-                }`}
-              >
-                Senior Tier (5–10 YOE) ✅
-              </button>
-              <button
-                onClick={() => setActiveTier('strong')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                  activeTier === 'strong'
-                    ? 'bg-[#1F4B7A] text-white shadow-xs'
-                    : 'bg-[#F9F7F2] text-[#5A5245]'
-                }`}
-              >
-                Strong (Mid)
-              </button>
-              <button
-                onClick={() => setActiveTier('basic')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
-                  activeTier === 'basic'
-                    ? 'bg-gray-600 text-white shadow-xs'
-                    : 'bg-[#F9F7F2] text-[#5A5245]'
-                }`}
-              >
-                Basic (Junior)
-              </button>
-            </div>
+            {Boolean(currentQ.answers.basic || currentQ.answers.strong) ? (
+              <div className="flex items-center space-x-2 mb-3">
+                <button
+                  onClick={() => setActiveTier('senior')}
+                  className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
+                    activeTier === 'senior'
+                      ? 'bg-[#BF360C] text-white shadow-xs'
+                      : 'bg-[#F9F7F2] text-[#5A5245]'
+                  }`}
+                >
+                  Senior Tier (5–10 YOE) ✅
+                </button>
+                <button
+                  onClick={() => setActiveTier('strong')}
+                  className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
+                    activeTier === 'strong'
+                      ? 'bg-[#1F4B7A] text-white shadow-xs'
+                      : 'bg-[#F9F7F2] text-[#5A5245]'
+                  }`}
+                >
+                  Strong (Mid)
+                </button>
+                <button
+                  onClick={() => setActiveTier('basic')}
+                  className={`px-2.5 py-1 rounded text-xs font-bold transition-all ${
+                    activeTier === 'basic'
+                      ? 'bg-gray-600 text-white shadow-xs'
+                      : 'bg-[#F9F7F2] text-[#5A5245]'
+                  }`}
+                >
+                  Basic (Junior)
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2 mb-3">
+                <span className="px-2.5 py-1 rounded text-xs font-bold bg-[#BF360C] text-white shadow-xs">
+                  Rapid-Fire Standard (30-Second Answer)
+                </span>
+              </div>
+            )}
 
             <div className="p-4 rounded-xl bg-[#FFFDFB] border border-[#BF360C]/30 text-[#1A1A1A] text-sm md:text-base leading-relaxed italic">
-              <MarkdownContent content={currentQ.answers[activeTier]} compact />
+              <MarkdownContent content={currentQ.answers[activeTier] || currentQ.answers.senior} compact />
             </div>
 
             {currentQ.answers.seniorKeyTakeaways && (

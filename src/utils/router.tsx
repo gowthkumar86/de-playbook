@@ -60,6 +60,93 @@ const SECTION_01_PART_ALIASES: Record<string, string> = {
   'snowflake-part-05': 'snowflake-part-05',
 };
 
+const SECTION_02_PART_ALIASES: Record<string, string> = {
+  'foundations': 'sql-part-01',
+  'part-1': 'sql-part-01',
+  'part-01': 'sql-part-01',
+  'part1': 'sql-part-01',
+  '1': 'sql-part-01',
+  'sql-part-01': 'sql-part-01',
+
+  'window-functions': 'sql-part-02',
+  'window': 'sql-part-02',
+  'part-2': 'sql-part-02',
+  'part-02': 'sql-part-02',
+  'part2': 'sql-part-02',
+  '2': 'sql-part-02',
+  'sql-part-02': 'sql-part-02',
+
+  'interview-patterns': 'sql-part-03',
+  'patterns': 'sql-part-03',
+  'part-3': 'sql-part-03',
+  'part-03': 'sql-part-03',
+  'part3': 'sql-part-03',
+  '3': 'sql-part-03',
+  'sql-part-03': 'sql-part-03',
+
+  'optimization': 'sql-part-04',
+  'tuning': 'sql-part-04',
+  'part-4': 'sql-part-04',
+  'part-04': 'sql-part-04',
+  'part4': 'sql-part-04',
+  '4': 'sql-part-04',
+  'sql-part-04': 'sql-part-04',
+
+  'interview': 'sql-part-05',
+  'cheatsheet': 'sql-part-05',
+  'qa': 'sql-part-05',
+  'part-5': 'sql-part-05',
+  'part-05': 'sql-part-05',
+  'part5': 'sql-part-05',
+  '5': 'sql-part-05',
+  'sql-part-05': 'sql-part-05',
+};
+
+const SECTION_03_PART_ALIASES: Record<string, string> = {
+  'foundations': 'python-part-01',
+  'part-1': 'python-part-01',
+  'part-01': 'python-part-01',
+  'part1': 'python-part-01',
+  '1': 'python-part-01',
+  'python-part-01': 'python-part-01',
+
+  'io-and-config': 'python-part-02',
+  'io': 'python-part-02',
+  'config': 'python-part-02',
+  'part-2': 'python-part-02',
+  'part-02': 'python-part-02',
+  'part2': 'python-part-02',
+  '2': 'python-part-02',
+  'python-part-02': 'python-part-02',
+
+  'etl-patterns': 'python-part-03',
+  'etl': 'python-part-03',
+  'api': 'python-part-03',
+  'part-3': 'python-part-03',
+  'part-03': 'python-part-03',
+  'part3': 'python-part-03',
+  '3': 'python-part-03',
+  'python-part-03': 'python-part-03',
+
+  'testing-and-typing': 'python-part-04',
+  'testing': 'python-part-04',
+  'typing': 'python-part-04',
+  'part-4': 'python-part-04',
+  'part-04': 'python-part-04',
+  'part4': 'python-part-04',
+  '4': 'python-part-04',
+  'python-part-04': 'python-part-04',
+
+  'interview': 'python-part-05',
+  'cheatsheet': 'python-part-05',
+  'qa': 'python-part-05',
+  'part-5': 'python-part-05',
+  'part-05': 'python-part-05',
+  'part5': 'python-part-05',
+  '5': 'python-part-05',
+  'python-part-05': 'python-part-05',
+};
+
 export function parseCurrentLocation(): RouteState {
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
   const search = window.location.search;
@@ -107,6 +194,20 @@ export function parseCurrentLocation(): RouteState {
       } else {
         partId = 'snowflake-part-01';
       }
+    } else if (sectionNum === 2) {
+      if (rawPart) {
+        const lower = rawPart.toLowerCase();
+        partId = SECTION_02_PART_ALIASES[lower] || 'sql-part-01';
+      } else {
+        partId = 'sql-part-01';
+      }
+    } else if (sectionNum === 3) {
+      if (rawPart) {
+        const lower = rawPart.toLowerCase();
+        partId = SECTION_03_PART_ALIASES[lower] || 'python-part-01';
+      } else {
+        partId = 'python-part-01';
+      }
     } else if (rawPart) {
       partId = rawPart;
     }
@@ -151,7 +252,7 @@ export function formatSectionPath(
   const padded = sectionNumber.toString().padStart(2, '0');
   let path = `/section/${padded}`;
 
-  if (sectionNumber === 1 && partId) {
+  if ((sectionNumber === 1 || sectionNumber === 2 || sectionNumber === 3) && partId) {
     path += `/${partId}`;
   }
 

@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { CURRICULUM_SECTIONS } from '../data/curriculumRegistry';
 import { SECTION_01_PARTS } from '../data/section01Index';
+import { SECTION_02_PARTS } from '../data/section02Index';
+import { SECTION_03_PARTS } from '../data/section03Index';
 import { CurriculumSection, UserProgress } from '../types';
 import { formatSectionPath, Link } from '../utils/router';
 import {
@@ -79,7 +81,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   }, [selectedTrack, searchFilter, statusFilter]);
 
   const completedCount = progress.completedParts.length;
-  const totalActiveModules = 6; // Section 00 + 5 parts of Section 01
+  const totalActiveModules = 16; // Section 00 (1) + Section 01 (5) + Section 02 (5) + Section 03 (5)
   const percentComplete = Math.round((completedCount / totalActiveModules) * 100);
 
   return (
@@ -129,7 +131,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>Available Now to Study</span>
             </h2>
             <span className="text-xs text-[#8C7B65] dark:text-[#7A7062] font-mono-code">
-              2 Active Sections • 6 Parts
+              4 Active Sections • 16 Parts
             </span>
           </div>
 
@@ -247,6 +249,128 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </Link>
               </div>
             </div>
+
+            {/* Section 02 Card */}
+            <div className="p-5 rounded-xl border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#1E1C1A] shadow-xs flex flex-col justify-between hover:border-[#BF360C]/50 transition-all">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded bg-[#BF360C] text-white font-mono-code text-xs font-bold">
+                      SECTION 02
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-mono-code text-[10px] font-bold uppercase">
+                      5 Parts Live
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-1.5 text-xs text-[#8C7B65] dark:text-[#7A7062] font-mono-code">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>14 Hours</span>
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-serif-heading font-bold text-[#1A1A1A] dark:text-[#EDE8DF] mt-2.5">
+                  Advanced SQL for Data Engineering
+                </h3>
+                <p className="text-xs font-serif-heading text-[#5A5245] dark:text-[#A89F91] mt-1.5 leading-relaxed">
+                  Query execution order, window frames, sessions &amp; gaps-and-islands, optimizer internals, join physical implementations, and 20 tiered interview questions.
+                </p>
+
+                {/* Subparts Chips */}
+                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  {SECTION_02_PARTS.map((part) => {
+                    const isDone = progress.completedParts.includes(part.id);
+                    return (
+                      <Link
+                        key={part.id}
+                        to={formatSectionPath(2, part.id)}
+                        className={`px-2 py-1 rounded text-[11px] font-mono-code border transition-colors flex items-center justify-between ${
+                          isDone
+                            ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
+                            : 'bg-[#F4EFE6] dark:bg-[#25221F] border-[#E9E4D9] dark:border-[#38332B] text-[#5A5245] dark:text-[#A89F91] hover:border-[#BF360C]'
+                        }`}
+                      >
+                        <span className="truncate">{part.partNumber}</span>
+                        {isDone && <Check className="w-3 h-3 ml-1 text-emerald-600 shrink-0" />}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#E9E4D9] dark:border-[#2C2823] flex items-center justify-between">
+                <span className="text-xs text-[#8C7B65] dark:text-[#7A7062]">
+                  {SECTION_02_PARTS.filter((p) => progress.completedParts.includes(p.id)).length} of 5 parts completed
+                </span>
+                <Link
+                  to="/section/02"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#1A1A1A] dark:bg-[#2E2A25] hover:bg-[#333333] text-white text-xs font-semibold transition-colors"
+                >
+                  <span>Open Section 02</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#BF360C]" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Section 03 Card */}
+            <div className="p-5 rounded-xl border border-[#D9D1C1] dark:border-[#38332B] bg-[#FFFFFF] dark:bg-[#1E1C1A] shadow-xs flex flex-col justify-between hover:border-[#BF360C]/50 transition-all">
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded bg-[#BF360C] text-white font-mono-code text-xs font-bold">
+                      SECTION 03
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-mono-code text-[10px] font-bold uppercase">
+                      5 Parts Live
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-1.5 text-xs text-[#8C7B65] dark:text-[#7A7062] font-mono-code">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>16 Hours</span>
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-serif-heading font-bold text-[#1A1A1A] dark:text-[#EDE8DF] mt-2.5">
+                  Python for Data Engineering
+                </h3>
+                <p className="text-xs font-serif-heading text-[#5A5245] dark:text-[#A89F91] mt-1.5 leading-relaxed">
+                  Memory layout, CPython GIL, generators &amp; streaming, I/O &amp; config, resilient REST ETL, pytest fixtures, Pydantic data modeling, and tiered interview bank.
+                </p>
+
+                {/* Subparts Chips */}
+                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  {SECTION_03_PARTS.map((part) => {
+                    const isDone = progress.completedParts.includes(part.id);
+                    return (
+                      <Link
+                        key={part.id}
+                        to={formatSectionPath(3, part.id)}
+                        className={`px-2 py-1 rounded text-[11px] font-mono-code border transition-colors flex items-center justify-between ${
+                          isDone
+                            ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
+                            : 'bg-[#F4EFE6] dark:bg-[#25221F] border-[#E9E4D9] dark:border-[#38332B] text-[#5A5245] dark:text-[#A89F91] hover:border-[#BF360C]'
+                        }`}
+                      >
+                        <span className="truncate">{part.partNumber}</span>
+                        {isDone && <Check className="w-3 h-3 ml-1 text-emerald-600 shrink-0" />}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#E9E4D9] dark:border-[#2C2823] flex items-center justify-between">
+                <span className="text-xs text-[#8C7B65] dark:text-[#7A7062]">
+                  {SECTION_03_PARTS.filter((p) => progress.completedParts.includes(p.id)).length} of 5 parts completed
+                </span>
+                <Link
+                  to="/section/03"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#1A1A1A] dark:bg-[#2E2A25] hover:bg-[#333333] text-white text-xs font-semibold transition-colors"
+                >
+                  <span>Open Section 03</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#BF360C]" />
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -304,7 +428,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       : 'text-[#5A5245] dark:text-[#A89F91] hover:text-[#1A1A1A]'
                   }`}
                 >
-                  Live (2)
+                  Live ({CURRICULUM_SECTIONS.filter((s) => s.status === 'active').length})
                 </button>
               </div>
             </div>
